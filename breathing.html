@@ -3,26 +3,50 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PUMP IT! — Дыхательные практики</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 35%,#285d4f,#112920 78%);color:#f0fff7;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  margin:0;min-height:100vh;
+  background:radial-gradient(circle at 50% 35%,#285d4f,#112920 78%);
+  color:#f0fff7;
+  font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  transition:background 3s
+}
+body.sleeping{background:#07110e}
 main{max-width:480px;margin:auto;padding:28px 20px 45px}
 .brand{font-size:12px;letter-spacing:3px;color:#a2e7c8;font-weight:800}
 h1{font-size:27px;margin:12px 0 16px}
 p{color:#c2dbce;line-height:1.5}
-label{display:block;font-size:12px;color:#b7d9ca;font-weight:700;margin:18px 0 8px}
-select,input[type=number]{width:100%;padding:13px;border:1px solid #699989;border-radius:12px;background:#21493c;color:white;font-size:16px}
+label{
+  display:block;font-size:12px;color:#b7d9ca;
+  font-weight:700;margin:18px 0 8px
+}
+select,input[type=number]{
+  width:100%;padding:13px;border:1px solid #699989;
+  border-radius:12px;background:#21493c;color:white;font-size:16px
+}
 .fields{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .fields label{text-align:center;font-size:11px;margin-top:18px}
 .fields input{text-align:center;padding:11px 3px}
 .choices{display:flex;gap:8px}
-.choice{flex:1;background:#23493c;border:1px solid #719c8b;color:white;border-radius:12px;padding:13px 3px;font-size:14px}
+.choice{
+  flex:1;background:#23493c;border:1px solid #719c8b;
+  color:white;border-radius:12px;padding:13px 3px;font-size:14px
+}
 .choice.selected{background:#94e5bb;color:#153d2d;font-weight:800}
 .orb-area{height:270px;display:flex;align-items:center;justify-content:center}
-.orb{width:180px;height:180px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#effff5,#8fe9c5 49%,#3d9b7b);box-shadow:0 0 65px #8bffc257;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#124536;transition:transform .12s linear}
+.orb{
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#effff5,#8fe9c5 49%,#3d9b7b);
+  box-shadow:0 0 65px #8bffc257;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;color:#124536;
+  transition:transform .12s linear,opacity 3s
+}
+body.sleeping .orb{opacity:.38;box-shadow:0 0 25px #3b856633}
 .phase{font-size:21px;font-weight:800}
 .count{font-size:49px;font-weight:800;font-variant-numeric:tabular-nums}
 .hint{font-size:12px}
@@ -30,7 +54,11 @@ select,input[type=number]{width:100%;padding:13px;border:1px solid #699989;borde
 .sound{display:flex;align-items:center;gap:10px;margin:18px 0;font-size:14px}
 .sound input{width:20px;height:20px;accent-color:#93e6bd}
 .actions{display:flex;gap:9px}
-.action{flex:1;padding:17px 8px;border:1px solid #83af9c;background:#305c4b;color:white;border-radius:13px;font-size:16px;font-weight:800}
+.action{
+  flex:1;padding:17px 8px;border:1px solid #83af9c;
+  background:#305c4b;color:white;border-radius:13px;
+  font-size:16px;font-weight:800
+}
 .action.primary{background:#97e7bd;color:#153d2e;border:none}
 .hidden{display:none!important}
 .note{font-size:12px;margin-top:22px;color:#b9d4c8}
@@ -46,19 +74,34 @@ select,input[type=number]{width:100%;padding:13px;border:1px solid #699989;borde
 <label for="technique">РИТМ</label>
 <select id="technique">
 <option value="calm">Спокойное дыхание · 4–6</option>
+<option value="sleep">🌙 Дыхание для сна · 4–6</option>
 <option value="square">Квадратное дыхание · 4–4–4–4</option>
 <option value="buteyko">По Бутейко · мягкое дыхание</option>
 <option value="custom">Свой ритм</option>
 </select>
 
 <div class="fields">
-<div><label for="inhale">Вдох</label><input id="inhale" type="number" min="1" max="20" value="4"></div>
-<div><label for="hold1">Задержка</label><input id="hold1" type="number" min="0" max="20" value="0"></div>
-<div><label for="exhale">Выдох</label><input id="exhale" type="number" min="1" max="20" value="6"></div>
-<div><label for="hold2">Задержка</label><input id="hold2" type="number" min="0" max="20" value="0"></div>
+<div>
+<label for="inhale">Вдох</label>
+<input id="inhale" type="number" min="1" max="20" value="4">
+</div>
+<div>
+<label for="hold1">Задержка</label>
+<input id="hold1" type="number" min="0" max="20" value="0">
+</div>
+<div>
+<label for="exhale">Выдох</label>
+<input id="exhale" type="number" min="1" max="20" value="6">
+</div>
+<div>
+<label for="hold2">Задержка</label>
+<input id="hold2" type="number" min="0" max="20" value="0">
+</div>
 </div>
 
-<p class="note" id="description">Спокойный вдох 4 секунды и плавный выдох 6 секунд, без задержек.</p>
+<p class="note" id="description">
+Спокойный вдох 4 секунды и плавный выдох 6 секунд, без задержек.
+</p>
 
 <label>ДЛИТЕЛЬНОСТЬ</label>
 <div class="choices">
@@ -77,7 +120,9 @@ select,input[type=number]{width:100%;padding:13px;border:1px solid #699989;borde
 </div>
 </div>
 
-<p id="status" class="status">Нажми «Начать», когда будешь готова.</p>
+<p id="status" class="status">
+Нажми «Начать», когда будешь готова.
+</p>
 
 <label class="sound">
 <input type="checkbox" id="sound" checked>
@@ -90,115 +135,137 @@ select,input[type=number]{width:100%;padding:13px;border:1px solid #699989;borde
 <button type="button" id="stop" class="action hidden">■ Стоп</button>
 </div>
 
-<p class="note">Задержку можно установить на 0. Если появляется головокружение или дискомфорт, останови практику. Для воспроизведения звука оставляй страницу открытой.</p>
+<p class="note">
+Задержку можно установить на 0. При головокружении или дискомфорте останови практику.
+Для воспроизведения звука оставляй страницу открытой.
+</p>
 </main>
 
 <script>
 "use strict";
 
-const tg = window.Telegram?.WebApp;
+const tg=window.Telegram?.WebApp;
 tg?.ready();
 tg?.expand();
 
-const el = id => document.getElementById(id);
+const el=id=>document.getElementById(id);
+const inputs=["inhale","hold1","exhale","hold2"];
 
-const presets = {
-  calm: [4,0,6,0],
-  square: [4,4,4,4],
-  buteyko: [3,0,4,0]
+const presets={
+  calm:[4,0,6,0],
+  sleep:[4,0,6,0],
+  square:[4,4,4,4],
+  buteyko:[3,0,4,0]
 };
 
-const descriptions = {
-  calm: "Спокойный вдох 4 секунды и плавный выдох 6 секунд, без задержек.",
-  square: "Вдох, задержка, выдох и задержка — по 4 секунды.",
-  buteyko: "Мягкое ознакомительное дыхание через нос: тихий неглубокий вдох и плавный выдох, без усилий. Это не полный метод Бутейко.",
-  custom: "Выбери комфортное количество секунд для каждой фазы."
+const descriptions={
+  calm:"Спокойный вдох 4 секунды и плавный выдох 6 секунд, без задержек.",
+  sleep:"Дыхание перед сном: мягкий вдох 4 секунды, длинный выдох 6 секунд. Экран потемнеет, звук постепенно стихнет.",
+  square:"Вдох, задержка, выдох и задержка — по 4 секунды.",
+  buteyko:"Мягкое ознакомительное дыхание через нос: тихий неглубокий вдох и плавный выдох. Это не полный метод Бутейко.",
+  custom:"Выбери комфортное количество секунд для каждой фазы."
 };
 
-const inputs = ["inhale","hold1","exhale","hold2"];
-let selectedMinutes = 3;
-let selectedTechnique = "calm";
-let cycle = [];
-let cycleSeconds = 10;
+let selectedMinutes=3;
+let selectedTechnique="calm";
+let cycle=[];
+let cycleSeconds=10;
 
-let running = false;
-let paused = false;
-let startTime = 0;
-let pausedElapsed = 0;
-let durationSeconds = 180;
-let frameId = 0;
-let audio = null;
-let audioUrl = null;
-let soundEnabled = false;
+let running=false;
+let paused=false;
+let startTime=0;
+let pausedElapsed=0;
+let durationSeconds=180;
+let frameId=0;
+let audio=null;
+let audioUrl=null;
+let soundEnabled=false;
 
-function updateDescription() {
-  el("description").textContent = descriptions[el("technique").value];
+function selectMinutes(minutes){
+  selectedMinutes=minutes;
+  document.querySelectorAll("[data-minutes]").forEach(button=>{
+    button.classList.toggle(
+      "selected",
+      Number(button.dataset.minutes)===minutes
+    );
+  });
 }
 
-el("technique").addEventListener("change", () => {
-  const name = el("technique").value;
-  if (presets[name]) {
-    inputs.forEach((id,i) => {
-      el(id).value = presets[name][i];
+function updateDescription(){
+  el("description").textContent=descriptions[el("technique").value];
+}
+
+el("technique").addEventListener("change",()=>{
+  const name=el("technique").value;
+
+  if(presets[name]){
+    inputs.forEach((id,i)=>{
+      el(id).value=presets[name][i];
     });
   }
+
+  if(name==="sleep")selectMinutes(5);
   updateDescription();
 });
 
-inputs.forEach(id => {
-  el(id).addEventListener("input", () => {
-    el("technique").value = "custom";
+inputs.forEach(id=>{
+  el(id).addEventListener("input",()=>{
+    el("technique").value="custom";
     updateDescription();
   });
 });
 
-document.querySelectorAll("[data-minutes]").forEach(button => {
-  button.addEventListener("click", () => {
-    selectedMinutes = Number(button.dataset.minutes);
-    document.querySelectorAll("[data-minutes]").forEach(item => {
-      item.classList.toggle("selected", item === button);
-    });
+document.querySelectorAll("[data-minutes]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    selectMinutes(Number(button.dataset.minutes));
   });
 });
 
-function buildCycle() {
-  const values = inputs.map((id,i) => {
-    const raw = el(id).value.trim();
-    const value = Number(raw);
-    const minimum = i === 0 || i === 2 ? 1 : 0;
-    if (raw === "" || !Number.isInteger(value) || value < minimum || value > 20) {
+function buildCycle(){
+  const values=inputs.map((id,i)=>{
+    const raw=el(id).value.trim();
+    const value=Number(raw);
+    const minimum=(i===0||i===2)?1:0;
+
+    if(
+      raw===""||
+      !Number.isInteger(value)||
+      value<minimum||
+      value>20
+    ){
       throw new Error("Проверь секунды вдоха, задержек и выдоха.");
     }
+
     return value;
   });
 
-  let position = 0;
-  const result = [];
+  let position=0;
+  const phases=[];
 
-  values.forEach((seconds,type) => {
-    if (seconds > 0) {
-      result.push({type,start:position,seconds});
-      position += seconds;
+  values.forEach((seconds,type)=>{
+    if(seconds>0){
+      phases.push({type,start:position,seconds});
+      position+=seconds;
     }
   });
 
-  return {phases:result,length:position};
+  return {phases,length:position};
 }
 
-function generateAudio(phases,length) {
-  const sampleRate = 16000;
-  const frameCount = Math.round(length * sampleRate);
-  const buffer = new ArrayBuffer(44 + frameCount * 2);
-  const view = new DataView(buffer);
+function generateAudio(phases,length){
+  const sampleRate=16000;
+  const frameCount=Math.round(length*sampleRate);
+  const buffer=new ArrayBuffer(44+frameCount*2);
+  const view=new DataView(buffer);
 
-  function writeText(offset,value) {
-    for (let i=0;i<value.length;i++) {
+  function writeText(offset,value){
+    for(let i=0;i<value.length;i++){
       view.setUint8(offset+i,value.charCodeAt(i));
     }
   }
 
   writeText(0,"RIFF");
-  view.setUint32(4,36 + frameCount*2,true);
+  view.setUint32(4,36+frameCount*2,true);
   writeText(8,"WAVE");
   writeText(12,"fmt ");
   view.setUint32(16,16,true);
@@ -211,161 +278,220 @@ function generateAudio(phases,length) {
   writeText(36,"data");
   view.setUint32(40,frameCount*2,true);
 
-  let smooth = 0;
+  let smooth=0;
 
-  for (const phase of phases) {
-    const startFrame = Math.round(phase.start * sampleRate);
-    const endFrame = Math.round((phase.start+phase.seconds)*sampleRate);
+  for(const phase of phases){
+    const startFrame=Math.round(phase.start*sampleRate);
+    const endFrame=Math.round(
+      (phase.start+phase.seconds)*sampleRate
+    );
 
-    for (let frame=startFrame;frame<endFrame;frame++) {
-      const time = (frame-startFrame)/sampleRate;
-      const fade = Math.max(0,Math.min(
-        1,
-        time/0.35,
-        (phase.seconds-time)/0.45
-      ));
+    for(let frame=startFrame;frame<endFrame;frame++){
+      const time=(frame-startFrame)/sampleRate;
 
-      let sample = 0;
+      const fade=Math.max(
+        0,
+        Math.min(
+          1,
+          time/0.35,
+          (phase.seconds-time)/0.45
+        )
+      );
 
-      if (phase.type === 0 || phase.type === 2) {
-        smooth = 0.91*smooth + 0.09*(Math.random()*2-1);
-        sample = smooth*(phase.type === 0 ? 0.86 : 0.70)*fade;
-      } else if (time < 0.4) {
-        sample = Math.sin(2*Math.PI*640*time)*0.23*Math.exp(-12*time);
+      let sample=0;
+
+      if(phase.type===0||phase.type===2){
+        smooth=0.91*smooth+0.09*(Math.random()*2-1);
+        sample=smooth*(phase.type===0?0.86:0.70)*fade;
+      }else if(time<0.4){
+        sample=Math.sin(2*Math.PI*640*time)*
+          0.23*Math.exp(-12*time);
       }
 
       view.setInt16(
         44+frame*2,
-        Math.round(Math.max(-1,Math.min(1,sample))*32767),
+        Math.round(
+          Math.max(-1,Math.min(1,sample))*32767
+        ),
         true
       );
     }
   }
 
-  return URL.createObjectURL(new Blob([buffer],{type:"audio/wav"}));
+  return URL.createObjectURL(
+    new Blob([buffer],{type:"audio/wav"})
+  );
 }
 
-function stopAudio() {
-  if (audio) {
+function stopAudio(){
+  if(audio){
     audio.pause();
     audio.removeAttribute("src");
     audio.load();
-    audio = null;
+    audio=null;
   }
-  if (audioUrl) {
+
+  if(audioUrl){
     URL.revokeObjectURL(audioUrl);
-    audioUrl = null;
+    audioUrl=null;
   }
 }
 
-function currentElapsed() {
+function currentElapsed(){
   return paused
-    ? pausedElapsed
-    : (performance.now()-startTime)/1000;
+    ?pausedElapsed
+    :(performance.now()-startTime)/1000;
 }
 
-function currentPhasePosition() {
-  if (soundEnabled && audio && !audio.paused && audio.readyState >= 2) {
-    return Math.min(audio.currentTime,cycleSeconds-0.001);
+function currentPhasePosition(){
+  if(
+    soundEnabled&&
+    audio&&
+    !audio.paused&&
+    audio.readyState>=2
+  ){
+    return Math.min(
+      audio.currentTime,
+      cycleSeconds-0.001
+    );
   }
+
   return currentElapsed()%cycleSeconds;
 }
 
-function render() {
-  if (!running || paused) return;
+function render(){
+  if(!running||paused)return;
 
-  const elapsed = currentElapsed();
+  const elapsed=currentElapsed();
 
-  if (elapsed >= durationSeconds) {
+  if(elapsed>=durationSeconds){
     finish(true);
     return;
   }
 
-  const position = currentPhasePosition();
-  const phase = cycle.find(p =>
-    position >= p.start &&
-    position < p.start+p.seconds
-  ) || cycle[cycle.length-1];
+  const position=currentPhasePosition();
 
-  const within = position-phase.start;
-  const remaining = Math.max(0,phase.seconds-within);
-  const progress = Math.max(0,Math.min(1,within/phase.seconds));
+  const phase=cycle.find(p=>
+    position>=p.start&&
+    position<p.start+p.seconds
+  )||cycle[cycle.length-1];
 
-  const labels = ["ВДОХ","ЗАДЕРЖКА","ВЫДОХ","ЗАДЕРЖКА"];
-  const messages = [
+  const within=position-phase.start;
+  const remaining=Math.max(
+    0,
+    phase.seconds-within
+  );
+
+  const progress=Math.max(
+    0,
+    Math.min(1,within/phase.seconds)
+  );
+
+  const labels=[
+    "ВДОХ",
+    "ЗАДЕРЖКА",
+    "ВЫДОХ",
+    "ЗАДЕРЖКА"
+  ];
+
+  const messages=[
     "Плавно вдыхай",
     "Пауза после вдоха",
     "Плавно выдыхай",
     "Пауза после выдоха"
   ];
 
-  let scale = 1;
+  let scale=1;
 
-  if (phase.type === 0) scale = 0.87+progress*0.26;
-  if (phase.type === 2) scale = 1.13-progress*0.26;
-  if (phase.type === 1) scale = 1.13;
-  if (phase.type === 3) scale = 0.87;
+  if(phase.type===0)scale=0.87+progress*0.26;
+  if(phase.type===2)scale=1.13-progress*0.26;
+  if(phase.type===1)scale=1.13;
+  if(phase.type===3)scale=0.87;
 
-  el("orb").style.transform = `scale(${scale})`;
-  el("phase").textContent = labels[phase.type];
-  el("count").textContent = Math.max(1,Math.ceil(remaining));
-  el("hint").textContent = `Осталось ${Math.ceil(durationSeconds-elapsed)} с`;
+  el("orb").style.transform=`scale(${scale})`;
+  el("phase").textContent=labels[phase.type];
+  el("count").textContent=Math.max(
+    1,
+    Math.ceil(remaining)
+  );
 
-  if (selectedTechnique === "buteyko") {
-    el("status").textContent =
-      phase.type === 0 ? "Тихий вдох через нос" :
-      phase.type === 2 ? "Мягкий выдох через нос" :
+  el("hint").textContent=
+    `Осталось ${Math.ceil(durationSeconds-elapsed)} с`;
+
+  if(selectedTechnique==="buteyko"){
+    el("status").textContent=
+      phase.type===0?"Тихий вдох через нос":
+      phase.type===2?"Мягкий выдох через нос":
       "Комфортная пауза";
-  } else {
-    el("status").textContent = messages[phase.type];
+  }else{
+    el("status").textContent=messages[phase.type];
   }
 
-  frameId = requestAnimationFrame(render);
+  if(selectedTechnique==="sleep"){
+    document.body.classList.add("sleeping");
+
+    if(audio&&soundEnabled){
+      const fraction=elapsed/durationSeconds;
+
+      // Постепенно уменьшаем громкость.
+      audio.volume=Math.max(
+        0.04,
+        0.55*(1-fraction)
+      );
+    }
+  }
+
+  frameId=requestAnimationFrame(render);
 }
 
-function start() {
+function start(){
   let config;
 
-  try {
-    config = buildCycle();
-  } catch(error) {
-    el("status").textContent = error.message;
+  try{
+    config=buildCycle();
+  }catch(error){
+    el("status").textContent=error.message;
     return;
   }
 
-  cycle = config.phases;
-  cycleSeconds = config.length;
-  durationSeconds = selectedMinutes*60;
-  selectedTechnique = el("technique").value;
-  soundEnabled = el("sound").checked;
+  cycle=config.phases;
+  cycleSeconds=config.length;
+  durationSeconds=selectedMinutes*60;
+  selectedTechnique=el("technique").value;
+  soundEnabled=el("sound").checked;
 
-  running = true;
-  paused = false;
-  pausedElapsed = 0;
+  running=true;
+  paused=false;
+  pausedElapsed=0;
+
+  document.body.classList.toggle(
+    "sleeping",
+    selectedTechnique==="sleep"
+  );
 
   el("settings").classList.add("hidden");
   el("start").classList.add("hidden");
   el("pause").classList.remove("hidden");
   el("stop").classList.remove("hidden");
-  el("sound").disabled = true;
+  el("sound").disabled=true;
 
-  startTime = performance.now();
+  startTime=performance.now();
 
-  if (soundEnabled) {
-    try {
-      audioUrl = generateAudio(cycle,cycleSeconds);
-      audio = new Audio(audioUrl);
-      audio.loop = true;
-      audio.volume = 1;
+  if(soundEnabled){
+    try{
+      audioUrl=generateAudio(cycle,cycleSeconds);
+      audio=new Audio(audioUrl);
+      audio.loop=true;
+      audio.volume=selectedTechnique==="sleep"?0.55:1;
 
-      audio.play().catch(() => {
-        soundEnabled = false;
-        el("status").textContent =
-          "Звук не включился. Таймер продолжит работу без звука.";
+      audio.play().catch(()=>{
+        soundEnabled=false;
+        el("status").textContent=
+          "Звук не включился. Таймер работает без звука.";
       });
-    } catch(error) {
-      soundEnabled = false;
-      el("status").textContent =
+    }catch(error){
+      soundEnabled=false;
+      el("status").textContent=
         "Звук недоступен. Таймер работает без звука.";
     }
   }
@@ -373,35 +499,45 @@ function start() {
   render();
 }
 
-function reset() {
-  running = false;
-  paused = false;
+function reset(){
+  running=false;
+  paused=false;
+
   cancelAnimationFrame(frameId);
   stopAudio();
+
+  document.body.classList.remove("sleeping");
 
   el("settings").classList.remove("hidden");
   el("start").classList.remove("hidden");
   el("pause").classList.add("hidden");
   el("stop").classList.add("hidden");
-  el("pause").textContent = "⏸ Пауза";
-  el("sound").disabled = false;
-  el("orb").style.transform = "";
+
+  el("pause").textContent="⏸ Пауза";
+  el("sound").disabled=false;
+  el("orb").style.transform="";
 }
 
-function finish(completed) {
-  const finishedSeconds = durationSeconds;
-  const finishedTechnique = selectedTechnique;
+function finish(completed){
+  const finishedSeconds=durationSeconds;
+  const finishedTechnique=selectedTechnique;
 
   reset();
 
-  el("phase").textContent = completed ? "Готово!" : "Остановлено";
-  el("count").textContent = completed ? "✓" : "♥";
-  el("hint").textContent = "";
-  el("status").textContent = completed
-    ? "Практика завершена!"
-    : "Незавершённая практика не записана.";
+  el("phase").textContent=
+    completed?"Готово!":"Остановлено";
 
-  if (completed && tg?.sendData) {
+  el("count").textContent=
+    completed?"✓":"♥";
+
+  el("hint").textContent="";
+
+  el("status").textContent=
+    completed
+      ?"Практика завершена!"
+      :"Незавершённая практика не записана.";
+
+  if(completed&&tg?.sendData){
     tg.sendData(JSON.stringify({
       event:"breathing_complete",
       technique:finishedTechnique,
@@ -412,31 +548,38 @@ function finish(completed) {
 
 el("start").addEventListener("click",start);
 
-el("stop").addEventListener("click",() => finish(false));
+el("stop").addEventListener(
+  "click",
+  ()=>finish(false)
+);
 
-el("pause").addEventListener("click",() => {
-  if (!running) return;
+el("pause").addEventListener("click",()=>{
+  if(!running)return;
 
-  if (!paused) {
-    pausedElapsed = currentElapsed();
-    paused = true;
+  if(!paused){
+    pausedElapsed=currentElapsed();
+    paused=true;
+
     cancelAnimationFrame(frameId);
 
-    if (audio) audio.pause();
+    if(audio)audio.pause();
 
-    el("pause").textContent = "▶ Продолжить";
-    el("status").textContent = "Пауза";
+    el("pause").textContent="▶ Продолжить";
+    el("status").textContent="Пауза";
     return;
   }
 
-  paused = false;
-  startTime = performance.now()-pausedElapsed*1000;
-  el("pause").textContent = "⏸ Пауза";
+  paused=false;
 
-  if (soundEnabled && audio) {
-    audio.play().catch(() => {
-      soundEnabled = false;
-      el("status").textContent = "Звук недоступен";
+  startTime=performance.now()-
+    pausedElapsed*1000;
+
+  el("pause").textContent="⏸ Пауза";
+
+  if(soundEnabled&&audio){
+    audio.play().catch(()=>{
+      soundEnabled=false;
+      el("status").textContent="Звук недоступен";
     });
   }
 
